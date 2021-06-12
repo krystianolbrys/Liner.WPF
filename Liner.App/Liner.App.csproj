@@ -117,6 +117,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Liner.API.Contracts\Liner.API.Contracts.csproj">
+      <Project>{A993AC6B-05E4-4D5F-86B2-AF119A9D415F}</Project>
+      <Name>Liner.API.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Liner.API.Service\Liner.API.Service.csproj">
+      <Project>{cf57deba-4f74-4c91-aec8-226e4cb15661}</Project>
+      <Name>Liner.API.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Liner.Infrastructure\Liner.Infrastructure.csproj">
       <Project>{6E952755-5B20-462A-9FBE-F7CB5A428358}</Project>
       <Name>Liner.Infrastructure</Name>
@@ -125,6 +133,11 @@
       <Project>{2676BE52-27FB-4C9F-9377-6E7FB1EF656F}</Project>
       <Name>Liner.Service</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

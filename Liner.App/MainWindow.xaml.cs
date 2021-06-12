@@ -1,9 +1,10 @@
 ﻿using System.Windows;
+using Liner.API.Contracts;
+using Liner.API.Contracts.Requests;
+using Liner.API.Service.IoC;
 using Liner.Infrastructure;
-using Liner.Service.IoC;
-using Liner.Service.Queries;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace Liner.App
 {
@@ -12,31 +13,33 @@ namespace Liner.App
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly IMediator _mediator;
+        private readonly ILinerApiService _api;
 
         public MainWindow()
         {
             InitializeComponent();
 
             var services = new ServiceCollection();
-
-            IServiceInstaller installer = new LinerServiceInstaller();
-
+            IServiceInstaller installer = new LinerApiServiceInstaller();
             installer.Install(services);
-
             var provider = services.BuildServiceProvider();
 
-            IMediator mediator = provider.GetRequiredService<IMediator>();
-
-            _mediator = mediator;
-
-            //var result = await mediator.Send(new SampleRequest(23));
+            _api = provider.GetRequiredService<ILinerApiService>();
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            var result = await _mediator.Send(new SampleRequest(23));
-            System.Console.WriteLine(result);
+            var request = new TwoPointsRequest
+            {
+                Start = new API.Contracts.Requests.Point { X = 10, Y = 50 },
+                End = new API.Contracts.Requests.Point { X = 100, Y = 140 }
+            };
+
+            var result = _api.GetPath(request);
+
+            var logMsg = JsonConvert.SerializeObject(result);
+
+            System.Console.WriteLine(logMsg);
         }
     }
 }
