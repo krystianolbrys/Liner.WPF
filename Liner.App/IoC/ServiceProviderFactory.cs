@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Liner.App.IoC
 {
-    public class IoCProviderFactory
+    public class ServiceProviderFactory
     {
         public IServiceProvider Provide()
         {

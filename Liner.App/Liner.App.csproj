@@ -85,13 +85,16 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IoC\AppInstaller.cs" />
-    <Compile Include="IoC\IoCProviderFactory.cs" />
+    <Compile Include="IoC\ServiceProviderFactory.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Enums\SelectedPointsStatusEnum.cs" />
+    <Compile Include="Models\Point.cs" />
+    <Compile Include="Models\PointsSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
