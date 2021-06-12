@@ -1,17 +1,14 @@
-﻿using System.Reflection;
-using Liner.API.Contracts;
+﻿using Liner.API.Contracts;
+using Liner.API.Service;
 using Liner.Infrastructure;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Liner.API.Service.IoC
+namespace Liner.App.IoC
 {
-    public class LinerApiServiceInstaller : IServiceInstaller
+    public class AppInstaller : IServiceInstaller
     {
         public void Install(IServiceCollection services)
         {
-            services.AddMediatR(Assembly.GetExecutingAssembly());
-
             services.AddTransient<ILinerApiService, ApiService>();
         }
     }

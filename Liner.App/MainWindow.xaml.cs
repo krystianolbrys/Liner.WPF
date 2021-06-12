@@ -1,30 +1,24 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Liner.API.Contracts;
 using Liner.API.Contracts.Requests;
-using Liner.API.Service.IoC;
-using Liner.Infrastructure;
+using Liner.App.IoC;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
 namespace Liner.App
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly ILinerApiService _api;
+        private readonly ILinerApiService _linerService;
 
         public MainWindow()
         {
             InitializeComponent();
+            var provider = new IoCProviderFactory().Provide();
 
-            var services = new ServiceCollection();
-            IServiceInstaller installer = new LinerApiServiceInstaller();
-            installer.Install(services);
-            var provider = services.BuildServiceProvider();
-
-            _api = provider.GetRequiredService<ILinerApiService>();
+            _linerService = provider.GetRequiredService<ILinerApiService>() 
+                ?? throw new ArgumentNullException(nameof(_linerService));
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -35,7 +29,7 @@ namespace Liner.App
                 End = new API.Contracts.Requests.Point { X = 100, Y = 140 }
             };
 
-            var result = _api.GetPath(request);
+            var result = _linerService.GetPath(request);
 
             var logMsg = JsonConvert.SerializeObject(result);
 
