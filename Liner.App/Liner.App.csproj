@@ -84,7 +84,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\UILogger.cs" />
+    <Compile Include="Loggers\UILogger.cs" />
     <Compile Include="IoC\AppInstaller.cs" />
     <Compile Include="IoC\ServiceProviderFactory.cs" />
     <Compile Include="MainWindow.xaml.cs">

@@ -3,7 +3,7 @@ using System.Text;
 using System.Windows.Controls;
 using Liner.Infrastructure;
 
-namespace Liner.App.Helpers
+namespace Liner.App.Loggers
 {
     public class UILogger : ILogger
     {
