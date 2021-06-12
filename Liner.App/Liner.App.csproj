@@ -129,10 +129,6 @@
       <Project>{6E952755-5B20-462A-9FBE-F7CB5A428358}</Project>
       <Name>Liner.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Liner.Service\Liner.Service.csproj">
-      <Project>{2676BE52-27FB-4C9F-9377-6E7FB1EF656F}</Project>
-      <Name>Liner.Service</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">
