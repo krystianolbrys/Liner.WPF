@@ -1,5 +1,6 @@
 ﻿using Liner.API.Contracts;
 using Liner.API.Service;
+using Liner.App.Models;
 using Liner.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ namespace Liner.App.IoC
         public void Install(IServiceCollection services)
         {
             services.AddTransient<ILinerApiService, ApiService>();
+            services.AddSingleton<PointsSelector>();
         }
     }
 }

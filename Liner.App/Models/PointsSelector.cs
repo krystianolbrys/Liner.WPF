@@ -29,6 +29,26 @@ namespace Liner.App.Models
             _strategies[Status](point);
         }
 
+        public override string ToString()
+        {
+            if (Status == SelectedPointsStatusEnum.NoneSelected)
+            {
+                return "None Selected";
+            }
+
+            if (Status == SelectedPointsStatusEnum.StartSelected)
+            {
+                return $"Start: {Start} - End: []";
+            }
+
+            if (Status == SelectedPointsStatusEnum.StartAndEndSelected)
+            {
+                return $"Start: {Start} - End: {End}";
+            }
+
+            throw new ArgumentOutOfRangeException();
+        }
+
         private IDictionary<SelectedPointsStatusEnum, Action<Point>> CreateStrategies =>
             new Dictionary<SelectedPointsStatusEnum, Action<Point>>
             {
@@ -38,11 +58,17 @@ namespace Liner.App.Models
                         Status = SelectedPointsStatusEnum.StartSelected;
                     }
                 },
-
                 { SelectedPointsStatusEnum.StartSelected, (point) =>
                     {
                         End = point;
                         Status = SelectedPointsStatusEnum.StartAndEndSelected;
+                    }
+                },
+                { SelectedPointsStatusEnum.StartAndEndSelected, (point) =>
+                    {
+                        Start = point;
+                        End = null;
+                        Status = SelectedPointsStatusEnum.StartSelected;
                     }
                 }
             };
