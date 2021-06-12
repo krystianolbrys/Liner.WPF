@@ -5,6 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Liner.App"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid/>
+        Title="MainWindow" Height="600" Width="800">
+    <Grid>
+        <Label Content="Select two points by clicking them to draw a path" HorizontalAlignment="Left" Height="19" Margin="20,14,0,0" Padding="0,0,0,0" VerticalAlignment="Top" Width="750"/>
+        <Canvas Name="mainCanva" HorizontalAlignment="Left" Height="276" Margin="20,40,0,0" VerticalAlignment="Top" Width="746" Background="AntiqueWhite"/>
+        <TextBox Name="logBox" BorderThickness="0,0,0,0" CaretBrush="White" SelectionOpacity="0" HorizontalAlignment="Left" Height="192" Margin="20,341,0,0" TextWrapping="Wrap" Text="Liner.App - Started" VerticalAlignment="Top" Width="750"/>
+    </Grid>
 </Window>
