@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -18,6 +19,7 @@ namespace Liner.App
         private readonly Contracts.ILinerApiService _linerService;
         private readonly ILogger _logger;
         private readonly PointsSelector _pointsSelector;
+        private readonly ICollection<Contracts.Common.Line> _linesCollection;
 
         public MainWindow()
         {
@@ -29,6 +31,8 @@ namespace Liner.App
 
             _pointsSelector = provider.GetRequiredService<PointsSelector>()
                  ?? throw new ArgumentNullException(nameof(_pointsSelector));
+
+            _linesCollection = new List<Contracts.Common.Line>();
 
             _logger = new UILogger(logBox);
 
@@ -42,28 +46,31 @@ namespace Liner.App
 
             _pointsSelector.Add(point);
 
-            _logger.Log(_pointsSelector.ToString());
+            _logger.Log(_pointsSelector);
 
             if (!_pointsSelector.PointSelectionCompleted)
             {
                 return;
             }
 
-            var request = new Contracts.Requests.TwoPointsRequest
+            var request = new Contracts.Requests.GetPathRequest
             {
-                Start = new Contracts.Requests.Point { X = _pointsSelector.Start.X, Y = _pointsSelector.Start.Y },
-                End = new Contracts.Requests.Point { X = _pointsSelector.End.X, Y = _pointsSelector.End.Y }
+                Start = new Contracts.Common.Point { X = _pointsSelector.Start.X, Y = _pointsSelector.Start.Y },
+                End = new Contracts.Common.Point { X = _pointsSelector.End.X, Y = _pointsSelector.End.Y }
             };
 
             var result = await _linerService.GetPath(request);
 
             foreach (var line in result.Lines)
             {
+                _linesCollection.Add(line);
                 DrawLineOnCanva(line, mainCanva);
             }
+
+            _logger.Log(_linesCollection);
         }
 
-        private void DrawLineOnCanva(Contracts.Responses.Line line, System.Windows.Controls.Canvas canva)
+        private void DrawLineOnCanva(Contracts.Common.Line line, System.Windows.Controls.Canvas canva)
         {
             Line lineOnCanva = new Line
             {

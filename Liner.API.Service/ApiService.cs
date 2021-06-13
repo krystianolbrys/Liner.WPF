@@ -17,7 +17,7 @@ namespace Liner.API.Service
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        public async Task<LinesResponse> GetPath(TwoPointsRequest request)
+        public async Task<PathResponse> GetPath(GetPathRequest request)
         {
             var command = new GetPathCommand
             {

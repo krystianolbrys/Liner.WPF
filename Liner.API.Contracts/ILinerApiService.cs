@@ -6,6 +6,6 @@ namespace Liner.API.Contracts
 {
     public interface ILinerApiService
     {
-        Task<LinesResponse> GetPath(TwoPointsRequest request);
+        Task<PathResponse> GetPath(GetPathRequest request);
     }
 }

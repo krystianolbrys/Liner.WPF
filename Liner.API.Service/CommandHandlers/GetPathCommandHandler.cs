@@ -3,27 +3,26 @@ using System.Threading;
 using System.Threading.Tasks;
 using Liner.API.Service.Commands;
 using MediatR;
-using Responses = Liner.API.Contracts.Responses;
 
 namespace Liner.API.Service.CommandHandlers
 {
-    public class GetPathCommandHandler : IRequestHandler<GetPathCommand, Responses.LinesResponse>
+    public class GetPathCommandHandler : IRequestHandler<GetPathCommand, Contracts.Responses.PathResponse>
     {
-        public async Task<Responses.LinesResponse> Handle(GetPathCommand request, CancellationToken cancellationToken)
+        public async Task<Contracts.Responses.PathResponse> Handle(GetPathCommand request, CancellationToken cancellationToken)
         {
-            return new Responses.LinesResponse
+            return new Contracts.Responses.PathResponse
             {
-                Lines = new List<Responses.Line>
+                Lines = new List<Contracts.Common.Line>
                  {
-                     new Responses.Line()
+                     new Contracts.Common.Line()
                      {
-                         Start = new Responses.Point { X = request.Start.X, Y = request.Start.Y },
-                         End = new Responses.Point { X = request.End.X, Y = request.End.Y }
+                         Start = new Contracts.Common.Point { X = request.Start.X, Y = request.Start.Y },
+                         End = new Contracts.Common.Point { X = request.End.X, Y = request.End.Y }
                      },
-                     new Responses.Line()
+                     new Contracts.Common.Line()
                      {
-                         Start = new Responses.Point { X = request.End.X, Y = request.End.Y },
-                         End = new Responses.Point { X = request.End.X, Y = request.End.Y + 10 }
+                         Start = new Contracts.Common.Point { X = request.End.X, Y = request.End.Y },
+                         End = new Contracts.Common.Point { X = request.End.X, Y = request.End.Y + 10 }
                      }
                  }
             };

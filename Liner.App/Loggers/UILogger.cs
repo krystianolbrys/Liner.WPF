@@ -14,12 +14,12 @@ namespace Liner.App.Loggers
             _textBox = textBox ?? throw new ArgumentNullException(nameof(textBox));
         }
 
-        public void Log(string message)
+        public void Log(object message)
         {
             var builder = new StringBuilder();
 
             builder.Append(_textBox.Text);
-            builder.AppendLine(message);
+            builder.AppendLine(message.ToString());
 
             _textBox.Text = builder.ToString();
             _textBox.ScrollToEnd();

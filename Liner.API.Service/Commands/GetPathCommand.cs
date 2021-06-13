@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Liner.API.Service.Commands
 {
-    public class GetPathCommand : IRequest<LinesResponse>
+    public class GetPathCommand : IRequest<PathResponse>
     {
         public Point Start { get; set; }
         public Point End { get; set; }
