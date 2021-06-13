@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Liner.API.Contracts\Liner.API.Contracts.csproj" />
+    <ProjectReference Include="..\Liner.Core\Liner.Core.csproj" />
     <ProjectReference Include="..\Liner.Infrastructure\Liner.Infrastructure.csproj" />
   </ItemGroup>
 

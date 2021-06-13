@@ -1,4 +1,5 @@
-﻿using Liner.API.Contracts.Responses;
+﻿using System.Collections.Generic;
+using Liner.API.Contracts.Responses;
 using MediatR;
 
 namespace Liner.API.Service.Commands
@@ -7,11 +8,25 @@ namespace Liner.API.Service.Commands
     {
         public Point Start { get; set; }
         public Point End { get; set; }
+        public ICollection<Line> ExistingLines { get; set; }
+        public Boundaries Boundaries { get; set; }
     }
 
     public class Point
     {
         public int X { get; set; }
         public int Y { get; set; }
+    }
+
+    public class Line
+    {
+        public Point Start { get; set; }
+        public Point End { get; set; }
+    }
+
+    public class Boundaries
+    {
+        public int MaxWidth { get; set; }
+        public int MaxHeight { get; set; }
     }
 }

@@ -8,5 +8,6 @@ namespace Liner.API.Contracts.Requests
         public Point Start { get; set; }
         public Point End { get; set; }
         public ICollection<Line> ExistingLines { get; set; }
+        public Boundaries Boundaries { get; set; }
     }
 }

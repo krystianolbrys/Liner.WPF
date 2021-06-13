@@ -4,11 +4,13 @@ namespace Liner.Core.Domain
 {
     public class Path
     {
-        private ICollection<Line> _lines;
+        public ICollection<Line> Lines { get; private set; }
 
         public Path()
         {
-            _lines = new List<Line>();
+            Lines = new List<Line>();
         }
+
+        public void AddLine(Line line) => Lines.Add(line);
     }
 }

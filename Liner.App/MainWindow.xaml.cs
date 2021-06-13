@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -10,6 +11,7 @@ using Liner.App.Mappers;
 using Liner.App.Models;
 using Liner.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Contracts = Liner.API.Contracts;
 
 namespace Liner.App
@@ -56,7 +58,17 @@ namespace Liner.App
             var request = new Contracts.Requests.GetPathRequest
             {
                 Start = new Contracts.Common.Point { X = _pointsSelector.Start.X, Y = _pointsSelector.Start.Y },
-                End = new Contracts.Common.Point { X = _pointsSelector.End.X, Y = _pointsSelector.End.Y }
+                End = new Contracts.Common.Point { X = _pointsSelector.End.X, Y = _pointsSelector.End.Y },
+                ExistingLines = _linesCollection.Select(line => new Contracts.Common.Line
+                {
+                    Start = new Contracts.Common.Point { X = line.Start.X, Y = line.Start.Y },
+                    End = new Contracts.Common.Point { X = line.Start.X, Y = line.Start.Y }
+                }).ToList().AsReadOnly(),
+                Boundaries = new Contracts.Requests.Boundaries
+                {
+                    MaxWidth = (int)mainCanva.Width,
+                    MaxHeight = (int)mainCanva.Height
+                }
             };
 
             var result = await _linerService.GetPath(request);
