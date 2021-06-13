@@ -29,6 +29,8 @@ namespace Liner.App.Models
             _strategies[Status](point);
         }
 
+        public bool PointSelectionCompleted => Status == SelectedPointsStatusEnum.StartAndEndSelected;
+
         public override string ToString()
         {
             if (Status == SelectedPointsStatusEnum.NoneSelected)

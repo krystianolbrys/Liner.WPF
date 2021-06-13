@@ -5,10 +5,10 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Liner.App.IoC;
 using Liner.App.Loggers;
+using Liner.App.Mappers;
 using Liner.App.Models;
 using Liner.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using Contracts = Liner.API.Contracts;
 
 namespace Liner.App
@@ -35,35 +35,35 @@ namespace Liner.App
             _logger.Log("Liner.App - Started");
         }
 
-        public async void CanvaClickEventHandler(object sender, MouseButtonEventArgs eventArgument)
+        public async void CanvaClickEventHandler(object sender, MouseButtonEventArgs eventArguments)
         {
-            var point = eventArgument.GetPosition((IInputElement)eventArgument.OriginalSource);
-            var mappedPoint = new Models.Point((int)point.X, (int)point.Y);
+            var point = GetPointRelativeToClickedElement(eventArguments)
+                .MapToPoint();
 
-            _pointsSelector.Add(mappedPoint);
+            _pointsSelector.Add(point);
 
             _logger.Log(_pointsSelector.ToString());
 
-            if (_pointsSelector.Status == Models.Enums.SelectedPointsStatusEnum.StartAndEndSelected)
+            if (!_pointsSelector.PointSelectionCompleted)
             {
-                var request = new Contracts.Requests.TwoPointsRequest
-                {
-                    Start = new API.Contracts.Requests.Point { X = _pointsSelector.Start.X, Y = _pointsSelector.Start.Y },
-                    End = new API.Contracts.Requests.Point { X = _pointsSelector.End.X, Y = _pointsSelector.End.Y }
-                };
+                return;
+            }
 
-                var result = await _linerService.GetPath(request);
+            var request = new Contracts.Requests.TwoPointsRequest
+            {
+                Start = new Contracts.Requests.Point { X = _pointsSelector.Start.X, Y = _pointsSelector.Start.Y },
+                End = new Contracts.Requests.Point { X = _pointsSelector.End.X, Y = _pointsSelector.End.Y }
+            };
 
-                foreach (var line in result.Lines)
-                {
-                    DrawLine(line);
-                }
+            var result = await _linerService.GetPath(request);
 
-                _logger.Log(JsonConvert.SerializeObject(result));
+            foreach (var line in result.Lines)
+            {
+                DrawLineOnCanva(line, mainCanva);
             }
         }
 
-        private void DrawLine(Contracts.Responses.Line line)
+        private void DrawLineOnCanva(Contracts.Responses.Line line, System.Windows.Controls.Canvas canva)
         {
             Line lineOnCanva = new Line
             {
@@ -75,7 +75,17 @@ namespace Liner.App
                 StrokeThickness = 1
             };
 
-            mainCanva.Children.Add(lineOnCanva);
+            canva.Children.Add(lineOnCanva);
+        }
+
+        private System.Windows.Point GetPointRelativeToClickedElement(MouseButtonEventArgs eventArgument)
+        {
+            if (!(eventArgument.Source is IInputElement source))
+            {
+                throw new ArgumentNullException($"{nameof(source)} is not IInputElement type - cannot get clicked position");
+            }
+
+            return eventArgument.GetPosition(source);
         }
     }
 }

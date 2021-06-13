@@ -93,6 +93,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mappers\UserIterfaceToModelsMappers.cs" />
     <Compile Include="Models\Enums\SelectedPointsStatusEnum.cs" />
     <Compile Include="Models\Point.cs" />
     <Compile Include="Models\PointsSelector.cs" />
