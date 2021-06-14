@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -64,7 +65,7 @@ namespace Liner.App
                 ExistingLines = _linesCollection.Select(line => new Contracts.Common.Line
                 {
                     Start = new Contracts.Common.Point { X = line.Start.X, Y = line.Start.Y },
-                    End = new Contracts.Common.Point { X = line.Start.X, Y = line.Start.Y }
+                    End = new Contracts.Common.Point { X = line.End.X, Y = line.End.Y }
                 }).ToList().AsReadOnly(),
                 Boundaries = new Contracts.Requests.Boundaries
                 {
@@ -73,7 +74,13 @@ namespace Liner.App
                 }
             };
 
+            Stopwatch sw = Stopwatch.StartNew();
+
             var result = await _linerService.GetPath(request);
+
+            sw.Stop();
+
+            _logger.Log(sw.ElapsedMilliseconds);
 
             foreach (var line in result.Lines)
             {
@@ -81,7 +88,7 @@ namespace Liner.App
                 DrawLineOnCanva(line, mainCanva);
             }
 
-            _logger.Log(_linesCollection);
+            //_logger.Log(_linesCollection);
         }
 
         private void DrawLineOnCanva(Contracts.Common.Line line, System.Windows.Controls.Canvas canva)

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Liner.API.Service.Commands;
@@ -18,8 +17,8 @@ namespace Liner.API.Service.CommandHandlers
 
             var linesWsad = request.ExistingLines.Select(line =>
                 new Domain.Line(
-                    new Domain.Point(request.Start.X, request.Start.Y),
-                    new Domain.Point(request.End.X, request.End.Y)))
+                    new Domain.Point(line.Start.X, line.Start.Y),
+                    new Domain.Point(line.End.X, line.End.Y)))
                 .ToList();
 
             var existingLines = new Domain.ExistingLines(linesWsad);

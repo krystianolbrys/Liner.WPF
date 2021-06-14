@@ -27,7 +27,7 @@ namespace Liner.API.Service
                 ExistingLines = request.ExistingLines.Select(line => new Line
                 {
                     Start = new Point { X = line.Start.X, Y = line.Start.Y },
-                    End = new Point { X = line.Start.X, Y = line.Start.Y }
+                    End = new Point { X = line.End.X, Y = line.End.Y }
                 }).ToList().AsReadOnly(),
                 Boundaries = new Commands.Boundaries
                 {
