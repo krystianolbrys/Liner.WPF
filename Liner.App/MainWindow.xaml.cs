@@ -11,11 +11,13 @@ using Liner.App.Mappers;
 using Liner.App.Models;
 using Liner.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using Contracts = Liner.API.Contracts;
 
 namespace Liner.App
 {
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : Window
     {
         private readonly Contracts.ILinerApiService _linerService;

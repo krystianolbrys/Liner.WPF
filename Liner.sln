@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Liner.App", "Liner.App\Liner.App.csproj", "{342A3845-3BA6-4CE0-B42E-B353B847676B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liner.Infrastructure", "Liner.Infrastructure\Liner.Infrastructure.csproj", "{6E952755-5B20-462A-9FBE-F7CB5A428358}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liner.API.Contracts", "Liner.API.Contracts\Liner.API.Contracts.csproj", "{A993AC6B-05E4-4D5F-86B2-AF119A9D415F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liner.API.Service", "Liner.API.Service\Liner.API.Service.csproj", "{CF57DEBA-4F74-4C91-AEC8-226E4CB15661}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Liner.Core", "Liner.Core\Liner.Core.csproj", "{F7F7CAD5-AA7D-4927-9274-C217616D8922}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liner.Core", "Liner.Core\Liner.Core.csproj", "{F7F7CAD5-AA7D-4927-9274-C217616D8922}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Liner.App", "Liner.App\Liner.App.csproj", "{D16E32C1-A866-48ED-A00F-BB18ED7880DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{342A3845-3BA6-4CE0-B42E-B353B847676B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{342A3845-3BA6-4CE0-B42E-B353B847676B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{342A3845-3BA6-4CE0-B42E-B353B847676B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{342A3845-3BA6-4CE0-B42E-B353B847676B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E952755-5B20-462A-9FBE-F7CB5A428358}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E952755-5B20-462A-9FBE-F7CB5A428358}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E952755-5B20-462A-9FBE-F7CB5A428358}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{F7F7CAD5-AA7D-4927-9274-C217616D8922}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7F7CAD5-AA7D-4927-9274-C217616D8922}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7F7CAD5-AA7D-4927-9274-C217616D8922}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D16E32C1-A866-48ED-A00F-BB18ED7880DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D16E32C1-A866-48ED-A00F-BB18ED7880DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D16E32C1-A866-48ED-A00F-BB18ED7880DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D16E32C1-A866-48ED-A00F-BB18ED7880DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
