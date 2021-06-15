@@ -74,28 +74,22 @@ namespace Liner.App
                 }
             };
 
-            Stopwatch sw = Stopwatch.StartNew();
-
             var result = await _linerService.GetPath(request);
 
-            sw.Stop();
-
-            _logger.Log(sw.ElapsedMilliseconds);
+            var brushColor = GenerateBrushColor();
 
             foreach (var line in result.Lines)
             {
                 _linesCollection.Add(line);
-                DrawLineOnCanva(line, mainCanva);
+                DrawLineOnCanva(line, mainCanva, brushColor);
             }
-
-            //_logger.Log(_linesCollection);
         }
 
-        private void DrawLineOnCanva(Contracts.Common.Line line, System.Windows.Controls.Canvas canva)
+        private void DrawLineOnCanva(Contracts.Common.Line line, System.Windows.Controls.Canvas canva, SolidColorBrush color)
         {
             Line lineOnCanva = new Line
             {
-                Stroke = Brushes.Black,
+                Stroke = color,
                 X1 = line.Start.X,
                 Y1 = line.Start.Y,
                 X2 = line.End.X,
@@ -104,6 +98,30 @@ namespace Liner.App
             };
 
             canva.Children.Add(lineOnCanva);
+        }
+
+        private SolidColorBrush GenerateBrushColor()
+        {
+            var brushes = new List<SolidColorBrush>
+            {
+                Brushes.Black,
+                Brushes.Orange,
+                Brushes.Green,
+                Brushes.Blue,
+                Brushes.LightGreen,
+                Brushes.Chocolate,
+                Brushes.Brown,
+                Brushes.DarkViolet,
+                Brushes.Violet,
+                Brushes.Pink,
+                Brushes.Ivory,
+                Brushes.Firebrick
+            };
+            var random = new Random();
+
+            return brushes[random.Next(0, brushes.Count - 1)];
+
+            return Brushes.Black;
         }
 
         private System.Windows.Point GetPointRelativeToClickedElement(MouseButtonEventArgs eventArgument)

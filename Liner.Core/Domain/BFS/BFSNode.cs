@@ -6,6 +6,9 @@ namespace Liner.Core.Domain.BFS
 {
     public class BFSNode<T>
     {
+        public bool Marker { get; set; }
+
+
         public bool Unavailable { get; set; }
         public bool Visited { get; set; }
         public BFSNode<T> Parent { get; set; }

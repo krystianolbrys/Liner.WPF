@@ -55,57 +55,50 @@ namespace Liner.Core.Services
             {
                 nodes[line.Start.X, line.Start.Y].SetUnavailable();
                 nodes[line.End.X, line.End.Y].SetUnavailable();
-            }
 
-            // BFS start
-            var bfsList = new List<BFSNode<Point>>();
-
-            var sourceNode = nodes[_start.X, _start.Y];
-            var endNode = nodes[_end.X, _end.Y];
-
-            //return new Path();
-
-            bfsList.Add(sourceNode);
-
-            while (bfsList.Any())
-            {
-                var node = bfsList.FirstOrDefault(n => !n.Visited);
-
-                if (node == null)
+                for (int x = line.Start.X - 5; x <= line.Start.X + 5; x++)
                 {
-                    break;
-                }
-                node.Visited = true;
-
-                //for (int i = 0; i < node.ChildrensArray.Length; i++)
-                //{
-                //    if (!node.ChildrensArray[i].Visited && !node.ChildrensArray[i].Unavailable)
-                //    {
-                //        //if (!bfsList.Contains(node.ChildrensArray[i]))
-                //        //{
-                //        //    bfsList.Add(node.ChildrensArray[i]);
-                //        //}
-                //        bfsList.Add(node.ChildrensArray[i]);
-
-                //        node.ChildrensArray[i].Parent = node;
-                //    }
-                //}
-
-                foreach (var children in node.ChildrensArray)
-                {
-                    if (!children.Visited && !children.Unavailable)
+                    for (int y = line.Start.Y -5; y <= line.Start.Y + 5; y++)
                     {
-                        if (!bfsList.Contains(children))
-                        {
-                            bfsList.Add(children);
-                        }
+                        nodes[x, y].SetUnavailable();
+                    }
+                }
 
-                        children.SetParent(node);
+                for (int x = line.End.X - 5; x <= line.End.X + 5; x++)
+                {
+                    for (int y = line.End.Y - 5; y <= line.End.Y + 5; y++)
+                    {
+                        nodes[x, y].SetUnavailable();
                     }
                 }
             }
 
-            return new Path();
+            // BFS start
+            //var bfsList = new List<BFSNode<Point>>();
+
+            var queue = new Queue<BFSNode<Point>>();
+
+            var sourceNode = nodes[_start.X, _start.Y];
+            var endNode = nodes[_end.X, _end.Y];
+
+            queue.Enqueue(sourceNode);
+
+            while (queue.Any())
+            {
+                var node = queue.Dequeue();
+
+                for (int i = 0; i < node.ChildrensArray.Length; i++)
+                {
+                    var children = node.ChildrensArray[i];
+
+                    if (!children.Visited && !children.Unavailable)
+                    {
+                        children.Visited = true;
+                        children.Parent = node;
+                        queue.Enqueue(children);
+                    }
+                }
+            }
 
             var solution = new List<Point>();
 
@@ -113,7 +106,7 @@ namespace Liner.Core.Services
 
             solution.Add(prev.Value);
 
-            while(prev != sourceNode)
+            while (prev != sourceNode)
             {
                 solution.Add(prev.Parent.Value);
                 prev = prev.Parent;
@@ -122,7 +115,7 @@ namespace Liner.Core.Services
             var pathNarysowany = new Path();
             var responseLines = new List<Line>();
 
-            for (int i = 0; i < solution.Count -1; i++)
+            for (int i = 0; i < solution.Count - 1; i++)
             {
                 var line = new Line(solution[i], solution[i + 1]);
                 pathNarysowany.AddLine(line);
