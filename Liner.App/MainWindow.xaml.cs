@@ -74,6 +74,10 @@ namespace Liner.App
 
             _pointsSelector.Reset();
             _logger.Log(_pointsSelector);
+
+            // zmienic BOudaries na COnfiguration
+            // dorzucić interface do algorytów grafowych
+            // ogarnąc zwrotkę z procesu tworzenia ściezki - success/fail
         }
 
         private Contracts.Requests.GetPathRequest BuildRequest(Canvas canva, PointsSelector pointsSelector, ICollection<Contracts.Common.TwoPointLine> lines)
