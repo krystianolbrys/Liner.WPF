@@ -6,7 +6,7 @@ namespace Liner.Core.Domain.Algorithms.BFS
     {
         public T Value { get; private set; }
         public bool Visited { get; private set; }
-        public bool Unavailable { get; private set; }
+        public bool Unreachable { get; private set; }
         public Node<T> Parent { get; private set; }
         public Queue<Node<T>> Childrens { get; private set; }
 
@@ -14,7 +14,7 @@ namespace Liner.Core.Domain.Algorithms.BFS
         {
             Value = value;
             Visited = false;
-            Unavailable = false;
+            Unreachable = false;
             Childrens = new Queue<Node<T>>();
         }
 
@@ -25,7 +25,7 @@ namespace Liner.Core.Domain.Algorithms.BFS
 
         public void SetVisited() => Visited = true;
 
-        public void SetUnavailable() => Unavailable = true;
+        public void SetUnreachable() => Unreachable = true;
 
         public bool IsParentAvailable() => Parent != null;
 

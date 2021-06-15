@@ -6,13 +6,13 @@ namespace Liner.Core.Domain
 {
     public class ExistingLines
     {
-        public ICollection<Line> Lines { get; private set; }
+        public ICollection<TwoPointLine> TwoPointLines { get; private set; }
 
-        public ExistingLines(ICollection<Line> lines)
+        public ExistingLines(ICollection<TwoPointLine> twoPointLines)
         {
-            Lines = lines ?? throw new ArgumentNullException(nameof(lines));
+            TwoPointLines = twoPointLines ?? throw new ArgumentNullException(nameof(twoPointLines));
         }
 
-        public bool IsEmpty => !Lines.Any();
+        public bool IsEmpty => !TwoPointLines.Any();
     }
 }

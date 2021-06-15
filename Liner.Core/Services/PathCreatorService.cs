@@ -4,51 +4,53 @@ using Liner.Core.Domain.Algorithms.BFS;
 
 namespace Liner.Core.Services
 {
-    public class BFSPointNodesPreparer
-    {
-        public Node<Point>[,] Prepare(Point start, Point end, ExistingLines existingLines, Configuration configuration)
-        {
-            var nodes = new Node<Point>[configuration.Width, configuration.Height];
-
-            return nodes;
-        }
-    }
-
-    public class PathCreatorService
+    public class BFSPointNodesProvider
     {
         private readonly Point _start;
         private readonly Point _end;
         private readonly ExistingLines _existingLines;
-        private readonly BoundaryPoint _boudaryPoint;
+        private readonly Configuration _configuration;
+        private Node<Point>[,] _nodes;
 
-        public PathCreatorService(Point start, Point end, ExistingLines existingLines, BoundaryPoint boudaryPoint)
+        public BFSPointNodesProvider(Point start, Point end, ExistingLines existingLines, Configuration configuration)
         {
             _start = start ?? throw new ArgumentNullException(nameof(start));
             _end = end ?? throw new ArgumentNullException(nameof(end));
             _existingLines = existingLines ?? throw new ArgumentNullException(nameof(existingLines));
-            _boudaryPoint = boudaryPoint ?? throw new ArgumentNullException(nameof(boudaryPoint));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public Path Create()
+        public Node<Point>[,] Provide()
         {
-            var width = _boudaryPoint.X;
-            var height = _boudaryPoint.Y;
+            CreateAndInitializeNodesTable(_configuration);
+            AssignNearesHorizontalAndVerticalNeighoursAsChildrens(_nodes, _configuration);
+            SetNodesAsUnreachableBasedOnExistingLinesAndMargin(_nodes, _existingLines, _configuration);
 
-            var nodes = new Node<Point>[width, height];
+            return _nodes;
+        }
 
-            // create nodes
-            for (int x = 0; x < width; x++)
+        public Node<Point> GetStartNode => GetNodeBasedOnCordinates(_nodes, _start, _configuration);
+
+        public Node<Point> GetEndNode => GetNodeBasedOnCordinates(_nodes, _end, _configuration);
+
+        private void CreateAndInitializeNodesTable(Configuration configuration)
+        {
+            _nodes = new Node<Point>[configuration.Width, configuration.Height];
+
+            for (int x = 0; x < configuration.Width; x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < configuration.Height; y++)
                 {
-                    nodes[x, y] = new Node<Point>(new Point(x, y));
+                    _nodes[x, y] = new Node<Point>(new Point(x, y));
                 }
             }
+        }
 
-            // populate childrens
-            for (int x = 1; x < width - 1; x++)
+        private void AssignNearesHorizontalAndVerticalNeighoursAsChildrens(Node<Point>[,] nodes, Configuration configuration)
+        {
+            for (int x = 1; x < configuration.Width - 1; x++)
             {
-                for (int y = 1; y < height - 1; y++)
+                for (int y = 1; y < configuration.Height - 1; y++)
                 {
                     nodes[x, y].AddChildren(nodes[x, y - 1]);
                     nodes[x, y].AddChildren(nodes[x + 1, y]);
@@ -56,55 +58,88 @@ namespace Liner.Core.Services
                     nodes[x, y].AddChildren(nodes[x - 1, y]);
                 }
             }
+        }
 
-            // create margin
-            var marginBetweenLines = 3;
+        private void SetNodesAsUnreachableBasedOnExistingLinesAndMargin(Node<Point>[,] nodes, ExistingLines existingLines, Configuration configuration)
+        {
+            var marginInPixels = configuration.LineMargin.Value;
 
-            foreach (var line in _existingLines.Lines)
+            foreach (var line in existingLines.TwoPointLines)
             {
-                nodes[line.Start.X, line.Start.Y].SetUnavailable();
-                nodes[line.End.X, line.End.Y].SetUnavailable();
+                nodes[line.Start.X, line.Start.Y].SetUnreachable();
+                nodes[line.End.X, line.End.Y].SetUnreachable();
 
-                for (int x = line.Start.X - marginBetweenLines; x <= line.Start.X + marginBetweenLines; x++)
+                for (int x = line.Start.X - marginInPixels; x <= line.Start.X + marginInPixels; x++)
                 {
-                    for (int y = line.Start.Y - marginBetweenLines; y <= line.Start.Y + marginBetweenLines; y++)
+                    for (int y = line.Start.Y - marginInPixels; y <= line.Start.Y + marginInPixels; y++)
                     {
-                        if (x >= 0
-                            && x < _boudaryPoint.X
-                            && y >= 0
-                            && y < _boudaryPoint.Y)
+                        if (IsPixelCordinatesInBoundaries(x, y, configuration))
                         {
-                            nodes[x, y].SetUnavailable();
+                            nodes[x, y].SetUnreachable();
                         }
                     }
                 }
 
-                for (int x = line.End.X - marginBetweenLines; x <= line.End.X + marginBetweenLines; x++)
+                for (int x = line.End.X - marginInPixels; x <= line.End.X + marginInPixels; x++)
                 {
-                    for (int y = line.End.Y - marginBetweenLines; y <= line.End.Y + marginBetweenLines; y++)
+                    for (int y = line.End.Y - marginInPixels; y <= line.End.Y + marginInPixels; y++)
                     {
-                        if (x >= 0
-                            && x < _boudaryPoint.X
-                            && y >= 0
-                            && y < _boudaryPoint.Y)
+                        if (IsPixelCordinatesInBoundaries(x, y, configuration))
                         {
-                            nodes[x, y].SetUnavailable();
+                            nodes[x, y].SetUnreachable();
                         }
                     }
                 }
             }
+        }
 
-            var startNode = nodes[_start.X, _start.Y];
-            var endNode = nodes[_end.X, _end.Y];
+        private Node<Point> GetNodeBasedOnCordinates(Node<Point>[,] nodes, Point point, Configuration configuration)
+        {
+            if (!IsPixelCordinatesInBoundaries(point.X, point.Y, configuration))
+            {
+                throw new ArgumentOutOfRangeException($"PixelCordinatesInBoundaries not meet - Here json with all request data");
+            }
 
-            var bfs = new BFS<Point>();
-            var bfsResult = bfs.FindPath(startNode, endNode);
+            return nodes[point.X, point.Y];
+        }
+
+        private bool IsPixelCordinatesInBoundaries(int x, int y, Configuration configuration) =>
+            x >= 0
+            && x < configuration.Width
+            && y >= 0
+            && y < configuration.Height;
+    }
+
+    public class PathCreatorService
+    {
+        private readonly Point _start;
+        private readonly Point _end;
+        private readonly ExistingLines _existingLines;
+        private readonly Configuration _configuration;
+
+        public PathCreatorService(Point start, Point end, ExistingLines existingLines, Configuration configuration)
+        {
+            _start = start ?? throw new ArgumentNullException(nameof(start));
+            _end = end ?? throw new ArgumentNullException(nameof(end));
+            _existingLines = existingLines ?? throw new ArgumentNullException(nameof(existingLines));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        }
+
+        public Path Create()
+        {
+            var nodesProvider = new BFSPointNodesProvider(_start, _end, _existingLines, _configuration);
+
+            nodesProvider.Provide();
+
+            var searchAlgorithm = new BFS<Point>();
+
+            var bfsResult = searchAlgorithm.FindPath(nodesProvider.GetStartNode, nodesProvider.GetEndNode);
 
             var response = new Path();
 
             for (int i = 0; i < bfsResult.Values.Length - 1; i++)
             {
-                var line = new Line(bfsResult.Values[i], bfsResult.Values[i + 1]);
+                var line = new TwoPointLine(bfsResult.Values[i], bfsResult.Values[i + 1]);
                 response.AddLine(line);
             }
 

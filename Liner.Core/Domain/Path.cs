@@ -4,13 +4,13 @@ namespace Liner.Core.Domain
 {
     public class Path
     {
-        public ICollection<Line> Lines { get; private set; }
+        public ICollection<TwoPointLine> Lines { get; private set; }
 
         public Path()
         {
-            Lines = new List<Line>();
+            Lines = new List<TwoPointLine>();
         }
 
-        public void AddLine(Line line) => Lines.Add(line);
+        public void AddLine(TwoPointLine line) => Lines.Add(line);
     }
 }

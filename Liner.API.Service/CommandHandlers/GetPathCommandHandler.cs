@@ -16,7 +16,7 @@ namespace Liner.API.Service.CommandHandlers
             var end = new Domain.Point(request.End.X, request.End.Y);
 
             var linesWsad = request.ExistingLines.Select(line =>
-                new Domain.Line(
+                new Domain.TwoPointLine(
                     new Domain.Point(line.Start.X, line.Start.Y),
                     new Domain.Point(line.End.X, line.End.Y)))
                 .ToList();
@@ -25,7 +25,11 @@ namespace Liner.API.Service.CommandHandlers
 
             var boudaryPoint = new Domain.BoundaryPoint(request.Boundaries.MaxWidth, request.Boundaries.MaxHeight);
 
-            var pathCreator = new PathCreatorService(start, end, existingLines, boudaryPoint);
+            var linesMargin = new Domain.PixelsMargin(3);
+
+            var configuration = new Domain.Configuration(request.Boundaries.MaxWidth, request.Boundaries.MaxHeight, linesMargin);
+
+            var pathCreator = new PathCreatorService(start, end, existingLines, configuration);
 
             var path = pathCreator.Create();
 

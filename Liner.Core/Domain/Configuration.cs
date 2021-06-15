@@ -2,15 +2,15 @@
 {
     public class Configuration
     {
-        public Configuration(int width, int height, int lineMarginInPixels)
+        public Configuration(int width, int height, PixelsMargin lineMargin)
         {
             Width = width;
             Height = height;
-            LineMarginInPixels = lineMarginInPixels;
+            LineMargin = lineMargin;
         }
 
         public int Width { get; private set; }
         public int Height { get; private set; }
-        public int LineMarginInPixels { get; private set; }
+        public PixelsMargin LineMargin { get; private set; }
     }
 }

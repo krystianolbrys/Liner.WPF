@@ -18,7 +18,7 @@ namespace Liner.Core.Domain.Algorithms.BFS
                 {
                     var children = parent.Childrens.Dequeue();
 
-                    if(!children.Visited && !children.Unavailable)
+                    if(!children.Visited && !children.Unreachable)
                     {
                         children.SetVisited();
                         children.SetParent(parent);
