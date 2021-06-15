@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Liner.Core.Domain
 {
@@ -12,7 +11,5 @@ namespace Liner.Core.Domain
         {
             TwoPointLines = twoPointLines ?? throw new ArgumentNullException(nameof(twoPointLines));
         }
-
-        public bool IsEmpty => !TwoPointLines.Any();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Liner.API.Contracts.Common
 {
-    public class Line
+    public class TwoPointLine
     {
         public Point Start { get; set; }
         public Point End { get; set; }

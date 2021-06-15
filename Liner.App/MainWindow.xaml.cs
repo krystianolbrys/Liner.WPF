@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -24,7 +25,7 @@ namespace Liner.App
         private readonly Contracts.ILinerApiService _linerService;
         private readonly ILogger _logger;
         private readonly PointsSelector _pointsSelector;
-        private readonly ICollection<Contracts.Common.Line> _linesCollection;
+        private readonly ICollection<Contracts.Common.TwoPointLine> _linesCollection;
 
         private int _brushCounter;
 
@@ -39,13 +40,14 @@ namespace Liner.App
             _pointsSelector = provider.GetRequiredService<PointsSelector>()
                  ?? throw new ArgumentNullException(nameof(_pointsSelector));
 
-            _linesCollection = new List<Contracts.Common.Line>();
+            _linesCollection = new List<Contracts.Common.TwoPointLine>();
 
             _logger = new UILogger(logBox);
 
             _brushCounter = 0;
 
             _logger.Log("Liner.App - Started");
+            _logger.Log(_pointsSelector);
         }
 
         public async void CanvaClickEventHandler(object sender, MouseButtonEventArgs eventArguments)
@@ -62,39 +64,42 @@ namespace Liner.App
                 return;
             }
 
-            var request = new Contracts.Requests.GetPathRequest
+            var request = BuildRequest(mainCanva, _pointsSelector, _linesCollection);
+
+            var result = await _linerService.GetPath(request);
+
+            var brushColorForPath = GenerateBrushColor();
+
+            foreach (var line in result.TwoPointLines)
             {
-                Start = new Contracts.Common.Point { X = _pointsSelector.Start.X, Y = _pointsSelector.Start.Y },
-                End = new Contracts.Common.Point { X = _pointsSelector.End.X, Y = _pointsSelector.End.Y },
-                ExistingLines = _linesCollection.Select(line => new Contracts.Common.Line
+                _linesCollection.Add(line);
+                DrawLineOnCanva(line, mainCanva, brushColorForPath);
+            }
+
+            _pointsSelector.Reset();
+            _logger.Log(_pointsSelector);
+        }
+
+        private Contracts.Requests.GetPathRequest BuildRequest(Canvas canva, PointsSelector pointsSelector, ICollection<Contracts.Common.TwoPointLine> lines)
+        {
+            return new Contracts.Requests.GetPathRequest
+            {
+                Start = new Contracts.Common.Point { X = pointsSelector.Start.X, Y = pointsSelector.Start.Y },
+                End = new Contracts.Common.Point { X = pointsSelector.End.X, Y = pointsSelector.End.Y },
+                ExistingLines = lines.Select(line => new Contracts.Common.TwoPointLine
                 {
                     Start = new Contracts.Common.Point { X = line.Start.X, Y = line.Start.Y },
                     End = new Contracts.Common.Point { X = line.End.X, Y = line.End.Y }
                 }).ToList().AsReadOnly(),
                 Boundaries = new Contracts.Requests.Boundaries
                 {
-                    MaxWidth = (int)mainCanva.Width,
-                    MaxHeight = (int)mainCanva.Height
+                    MaxWidth = (int)canva.Width,
+                    MaxHeight = (int)canva.Height
                 }
             };
-            Stopwatch sw = Stopwatch.StartNew();
-            var result = await _linerService.GetPath(request);
-
-            var brushColor = GenerateBrushColor();
-
-            
-
-            foreach (var line in result.Lines)
-            {
-                _linesCollection.Add(line);
-                DrawLineOnCanva(line, mainCanva, brushColor);
-            }
-
-            sw.Stop();
-            _logger.Log(sw.ElapsedMilliseconds);
         }
 
-        private void DrawLineOnCanva(Contracts.Common.Line line, System.Windows.Controls.Canvas canva, SolidColorBrush color)
+        private void DrawLineOnCanva(Contracts.Common.TwoPointLine line, System.Windows.Controls.Canvas canva, SolidColorBrush color)
         {
             Line lineOnCanva = new Line
             {

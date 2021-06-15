@@ -8,7 +8,7 @@ namespace Liner.API.Service.Commands
     {
         public Point Start { get; set; }
         public Point End { get; set; }
-        public ICollection<Line> ExistingLines { get; set; }
+        public ICollection<TwoPointLine> ExistingLines { get; set; }
         public Boundaries Boundaries { get; set; }
     }
 
@@ -18,7 +18,7 @@ namespace Liner.API.Service.Commands
         public int Y { get; set; }
     }
 
-    public class Line
+    public class TwoPointLine
     {
         public Point Start { get; set; }
         public Point End { get; set; }

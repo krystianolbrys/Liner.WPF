@@ -24,7 +24,7 @@ namespace Liner.API.Service
             {
                 Start = new Commands.Point { X = request.Start.X, Y = request.Start.Y },
                 End = new Commands.Point { X = request.End.X, Y = request.End.Y },
-                ExistingLines = request.ExistingLines.Select(line => new Line
+                ExistingLines = request.ExistingLines.Select(line => new TwoPointLine
                 {
                     Start = new Point { X = line.Start.X, Y = line.Start.Y },
                     End = new Point { X = line.End.X, Y = line.End.Y }

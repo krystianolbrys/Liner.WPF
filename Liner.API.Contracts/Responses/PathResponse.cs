@@ -5,6 +5,6 @@ namespace Liner.API.Contracts.Responses
 {
     public class PathResponse
     {
-        public IReadOnlyCollection<Line> Lines { get; set; }
+        public IReadOnlyCollection<TwoPointLine> TwoPointLines { get; set; }
     }
 }

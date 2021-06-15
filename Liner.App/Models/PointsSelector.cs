@@ -29,22 +29,32 @@ namespace Liner.App.Models
             _strategies[Status](point);
         }
 
+        public void Reset()
+        {
+            Start = null;
+            End = null;
+            Status = SelectedPointsStatusEnum.NoneSelected;
+        }
+
         public bool PointSelectionCompleted => Status == SelectedPointsStatusEnum.StartAndEndSelected;
 
         public override string ToString()
         {
             if (Status == SelectedPointsStatusEnum.NoneSelected)
             {
+                return "Select starting point.";
                 return "None Selected";
             }
 
             if (Status == SelectedPointsStatusEnum.StartSelected)
             {
+                return "Starting point selected, select end point.";
                 return $"Start: {Start} - End: []";
             }
 
             if (Status == SelectedPointsStatusEnum.StartAndEndSelected)
             {
+                return "Points selected - Attempting to draw path.";
                 return $"Start: {Start} - End: {End}";
             }
 
@@ -68,9 +78,9 @@ namespace Liner.App.Models
                 },
                 { SelectedPointsStatusEnum.StartAndEndSelected, (point) =>
                     {
-                        Start = point;
-                        End = null;
-                        Status = SelectedPointsStatusEnum.StartSelected;
+                        //Start = point;
+                        //End = null;
+                        //Status = SelectedPointsStatusEnum.StartSelected;
                     }
                 }
             };

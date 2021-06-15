@@ -15,27 +15,30 @@ namespace Liner.API.Service.CommandHandlers
             var start = new Domain.Point(request.Start.X, request.Start.Y);
             var end = new Domain.Point(request.End.X, request.End.Y);
 
-            var linesWsad = request.ExistingLines.Select(line =>
+            var twoPointLines = request.ExistingLines.Select(line => // zmien nazwe
                 new Domain.TwoPointLine(
                     new Domain.Point(line.Start.X, line.Start.Y),
                     new Domain.Point(line.End.X, line.End.Y)))
                 .ToList();
 
-            var existingLines = new Domain.ExistingLines(linesWsad);
+            var existingLines = new Domain.ExistingLines(twoPointLines);
 
-            var boudaryPoint = new Domain.BoundaryPoint(request.Boundaries.MaxWidth, request.Boundaries.MaxHeight);
-
-            var linesMargin = new Domain.PixelsMargin(3);
+            var linesMargin = new Domain.PixelsMargin(10);
 
             var configuration = new Domain.Configuration(request.Boundaries.MaxWidth, request.Boundaries.MaxHeight, linesMargin);
 
             var pathCreator = new PathCreatorService(start, end, existingLines, configuration);
 
-            var path = pathCreator.Create();
+            Domain.Path path = null;
+
+            await Task.Run(() =>
+            {
+                path = pathCreator.Create();
+            });
 
             return new Contracts.Responses.PathResponse
             {
-                Lines = path.Lines.Select(line => new Contracts.Common.Line()
+                TwoPointLines = path.Lines.Select(line => new Contracts.Common.TwoPointLine()
                 {
                     Start = new Contracts.Common.Point { X = line.Start.X, Y = line.Start.Y },
                     End = new Contracts.Common.Point { X = line.End.X, Y = line.End.Y }
