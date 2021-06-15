@@ -23,7 +23,7 @@ namespace Liner.API.Service.CommandHandlers
 
             var existingLines = new Domain.ExistingLines(twoPointLines);
 
-            var linesMargin = new Domain.PixelsMargin(10);
+            var linesMargin = new Domain.PixelsMargin(5);
 
             var configuration = new Domain.Configuration(request.Boundaries.MaxWidth, request.Boundaries.MaxHeight, linesMargin);
 

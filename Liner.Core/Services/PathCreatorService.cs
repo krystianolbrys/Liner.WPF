@@ -4,78 +4,76 @@ using Liner.Core.Domain.Algorithms.BFS;
 
 namespace Liner.Core.Services
 {
-    public class BFSPointNodesProvider
+    public class PointNodes
     {
-        private readonly Point _start;
-        private readonly Point _end;
-        private readonly ExistingLines _existingLines;
-        private readonly Configuration _configuration;
-        private Node<Point>[,] _nodes;
+        public readonly Point Start;
+        public readonly Point End;
+        public readonly ExistingLines ExistingLines;
+        public readonly Configuration Configuration;
+        public Node<Point>[,] Nodes { get; private set; }
 
-        public BFSPointNodesProvider(Point start, Point end, ExistingLines existingLines, Configuration configuration)
+        public PointNodes(Point start, Point end, ExistingLines existingLines, Configuration configuration)
         {
-            _start = start ?? throw new ArgumentNullException(nameof(start));
-            _end = end ?? throw new ArgumentNullException(nameof(end));
-            _existingLines = existingLines ?? throw new ArgumentNullException(nameof(existingLines));
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            Start = start ?? throw new ArgumentNullException(nameof(start));
+            End = end ?? throw new ArgumentNullException(nameof(end));
+            ExistingLines = existingLines ?? throw new ArgumentNullException(nameof(existingLines));
+            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public Node<Point>[,] Provide()
+        public void Prepare()
         {
-            CreateAndInitializeNodesTable(_configuration);
-            AssignNearesHorizontalAndVerticalNeighoursAsChildrens(_nodes, _configuration);
-            SetNodesAsUnreachableBasedOnExistingLinesAndMargin(_nodes, _existingLines, _configuration);
-
-            return _nodes;
+            CreateAndInitializeNodesTable();
+            AssignNearesHorizontalAndVerticalNeighoursAsChildrens();
+            SetNodesAsUnreachableBasedOnExistingLinesAndMargin();
         }
 
-        public Node<Point> GetStartNode => GetNodeBasedOnCordinates(_nodes, _start, _configuration);
+        public Node<Point> GetStartNode => GetNodeBasedOnCordinates(Start);
 
-        public Node<Point> GetEndNode => GetNodeBasedOnCordinates(_nodes, _end, _configuration);
+        public Node<Point> GetEndNode => GetNodeBasedOnCordinates(End);
 
-        private void CreateAndInitializeNodesTable(Configuration configuration)
+        private void CreateAndInitializeNodesTable()
         {
-            _nodes = new Node<Point>[configuration.Width, configuration.Height];
+            Nodes = new Node<Point>[Configuration.Width, Configuration.Height];
 
-            for (int x = 0; x < configuration.Width; x++)
+            for (int x = 0; x < Configuration.Width; x++)
             {
-                for (int y = 0; y < configuration.Height; y++)
+                for (int y = 0; y < Configuration.Height; y++)
                 {
-                    _nodes[x, y] = new Node<Point>(new Point(x, y));
+                    Nodes[x, y] = new Node<Point>(new Point(x, y));
                 }
             }
         }
 
-        private void AssignNearesHorizontalAndVerticalNeighoursAsChildrens(Node<Point>[,] nodes, Configuration configuration)
+        private void AssignNearesHorizontalAndVerticalNeighoursAsChildrens()
         {
-            for (int x = 1; x < configuration.Width - 1; x++)
+            for (int x = 1; x < Configuration.Width - 1; x++)
             {
-                for (int y = 1; y < configuration.Height - 1; y++)
+                for (int y = 1; y < Configuration.Height - 1; y++)
                 {
-                    nodes[x, y].AddChildren(nodes[x, y - 1]);
-                    nodes[x, y].AddChildren(nodes[x + 1, y]);
-                    nodes[x, y].AddChildren(nodes[x, y + 1]);
-                    nodes[x, y].AddChildren(nodes[x - 1, y]);
+                    Nodes[x, y].AddChildren(Nodes[x, y - 1]);
+                    Nodes[x, y].AddChildren(Nodes[x + 1, y]);
+                    Nodes[x, y].AddChildren(Nodes[x, y + 1]);
+                    Nodes[x, y].AddChildren(Nodes[x - 1, y]);
                 }
             }
         }
 
-        private void SetNodesAsUnreachableBasedOnExistingLinesAndMargin(Node<Point>[,] nodes, ExistingLines existingLines, Configuration configuration)
+        private void SetNodesAsUnreachableBasedOnExistingLinesAndMargin()
         {
-            var marginInPixels = configuration.LineMargin.Value;
+            var marginInPixels = Configuration.LineMargin.Value;
 
-            foreach (var line in existingLines.TwoPointLines)
+            foreach (var line in ExistingLines.TwoPointLines)
             {
-                nodes[line.Start.X, line.Start.Y].SetUnreachable();
-                nodes[line.End.X, line.End.Y].SetUnreachable();
+                Nodes[line.Start.X, line.Start.Y].SetUnreachable();
+                Nodes[line.End.X, line.End.Y].SetUnreachable();
 
                 for (int x = line.Start.X - marginInPixels; x <= line.Start.X + marginInPixels; x++)
                 {
                     for (int y = line.Start.Y - marginInPixels; y <= line.Start.Y + marginInPixels; y++)
                     {
-                        if (IsPixelCordinatesInBoundaries(x, y, configuration))
+                        if (IsPixelCordinatesInBoundaries(x, y, Configuration))
                         {
-                            nodes[x, y].SetUnreachable();
+                            Nodes[x, y].SetUnreachable();
                         }
                     }
                 }
@@ -84,23 +82,23 @@ namespace Liner.Core.Services
                 {
                     for (int y = line.End.Y - marginInPixels; y <= line.End.Y + marginInPixels; y++)
                     {
-                        if (IsPixelCordinatesInBoundaries(x, y, configuration))
+                        if (IsPixelCordinatesInBoundaries(x, y, Configuration))
                         {
-                            nodes[x, y].SetUnreachable();
+                            Nodes[x, y].SetUnreachable();
                         }
                     }
                 }
             }
         }
 
-        private Node<Point> GetNodeBasedOnCordinates(Node<Point>[,] nodes, Point point, Configuration configuration)
+        private Node<Point> GetNodeBasedOnCordinates(Point point)
         {
-            if (!IsPixelCordinatesInBoundaries(point.X, point.Y, configuration))
+            if (!IsPixelCordinatesInBoundaries(point.X, point.Y, Configuration))
             {
                 throw new ArgumentOutOfRangeException($"PixelCordinatesInBoundaries not meet - Here json with all request data");
             }
 
-            return nodes[point.X, point.Y];
+            return Nodes[point.X, point.Y];
         }
 
         private bool IsPixelCordinatesInBoundaries(int x, int y, Configuration configuration) =>
@@ -127,13 +125,13 @@ namespace Liner.Core.Services
 
         public Path Create()
         {
-            var nodesProvider = new BFSPointNodesProvider(_start, _end, _existingLines, _configuration);
+            var nodes = new PointNodes(_start, _end, _existingLines, _configuration);
 
-            nodesProvider.Provide();
+            nodes.Prepare();
 
             var searchAlgorithm = new BFS<Point>();
 
-            var bfsResult = searchAlgorithm.FindPath(nodesProvider.GetStartNode, nodesProvider.GetEndNode);
+            var bfsResult = searchAlgorithm.FindPath(nodes.GetStartNode, nodes.GetEndNode);
 
             var response = new Path();
 
