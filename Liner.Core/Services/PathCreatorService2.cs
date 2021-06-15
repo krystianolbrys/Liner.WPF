@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Liner.Core.Domain;
 using Liner.Core.Domain.Algorithms.BFS;
 
 namespace Liner.Core.Services
 {
-    public class PathCreatorService2
+    public class PathCreatorService
     {
         private readonly Point _start;
         private readonly Point _end;
         private readonly ExistingLines _existingLines;
         private readonly BoundaryPoint _boudaryPoint;
 
-        public PathCreatorService2(Point start, Point end, ExistingLines existingLines, BoundaryPoint boudaryPoint)
+        public PathCreatorService(Point start, Point end, ExistingLines existingLines, BoundaryPoint boudaryPoint)
         {
             _start = start ?? throw new ArgumentNullException(nameof(start));
             _end = end ?? throw new ArgumentNullException(nameof(end));
@@ -22,7 +23,6 @@ namespace Liner.Core.Services
 
         public Path Create()
         {
-
             var width = _boudaryPoint.X;
             var height = _boudaryPoint.Y;
 
@@ -49,6 +49,7 @@ namespace Liner.Core.Services
                 }
             }
 
+            // create margin
             var marginBetweenLines = 3;
 
             foreach (var line in _existingLines.Lines)
@@ -77,14 +78,7 @@ namespace Liner.Core.Services
             var endNode = nodes[_end.X, _end.Y];
 
             var bfs = new BreadthFirstSearch<Point>();
-
-            Stopwatch sw = Stopwatch.StartNew();
-
             var bfsResult = bfs.FindPath(startNode, endNode);
-
-            sw.Stop();
-
-            Console.WriteLine(sw.ElapsedMilliseconds);
 
             var response = new Path();
 
