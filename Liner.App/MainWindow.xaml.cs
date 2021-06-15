@@ -26,6 +26,8 @@ namespace Liner.App
         private readonly PointsSelector _pointsSelector;
         private readonly ICollection<Contracts.Common.Line> _linesCollection;
 
+        private int _brushCounter;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -40,6 +42,8 @@ namespace Liner.App
             _linesCollection = new List<Contracts.Common.Line>();
 
             _logger = new UILogger(logBox);
+
+            _brushCounter = 0;
 
             _logger.Log("Liner.App - Started");
         }
@@ -109,24 +113,16 @@ namespace Liner.App
         {
             var brushes = new List<SolidColorBrush>
             {
-                Brushes.Black,
-                Brushes.Orange,
                 Brushes.Green,
+                Brushes.Goldenrod,
+                Brushes.Black,
                 Brushes.Blue,
-                Brushes.LightGreen,
-                Brushes.Chocolate,
+                Brushes.Red,
                 Brushes.Brown,
-                Brushes.DarkViolet,
-                Brushes.Violet,
-                Brushes.Pink,
-                Brushes.Ivory,
-                Brushes.Firebrick
+                Brushes.DarkViolet
             };
-            var random = new Random();
 
-            return brushes[random.Next(0, brushes.Count - 1)];
-
-            return Brushes.Black;
+            return brushes[_brushCounter++ % brushes.Count];
         }
 
         private System.Windows.Point GetPointRelativeToClickedElement(MouseButtonEventArgs eventArgument)

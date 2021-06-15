@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Liner.Core.Domain.Algorithms.BFS
 {
-    public class BreadthFirstSearch<T>
+    public class BFS<T>
     {
-        public BreadthFirstSearchResult<T> FindPath(Node<T> start, Node<T> end)
+        public BFSResult<T> FindPath(Node<T> start, Node<T> end)
         {
             var queue = new Queue<Node<T>>();
 
@@ -34,7 +33,7 @@ namespace Liner.Core.Domain.Algorithms.BFS
 
             if (!end.IsParentAvailable())
             {
-                return BreadthFirstSearchResult<T>.NotFound;
+                return BFSResult<T>.NotFound;
             }
 
             while (actualNode.IsParentAvailable())
@@ -49,22 +48,7 @@ namespace Liner.Core.Domain.Algorithms.BFS
                 }
             }
 
-            return new BreadthFirstSearchResult<T>(true, nodesValues);
+            return new BFSResult<T>(true, nodesValues);
         }
-    }
-
-    public class BreadthFirstSearchResult<T>
-    {
-        public bool Success { get; private set; }
-        public T[] Values { get; private set; }
-
-        public BreadthFirstSearchResult(bool success, IEnumerable<T> values)
-        {
-            Success = success;
-            Values = values.ToArray();
-        }
-
-        public static BreadthFirstSearchResult<T> NotFound =>
-            new BreadthFirstSearchResult<T>(false, new List<T>());
     }
 }

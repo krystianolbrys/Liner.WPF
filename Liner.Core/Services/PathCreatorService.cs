@@ -1,11 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Liner.Core.Domain;
 using Liner.Core.Domain.Algorithms.BFS;
 
 namespace Liner.Core.Services
 {
+    public class BFSPointNodesPreparer
+    {
+        public Node<Point>[,] Prepare(Point start, Point end, ExistingLines existingLines, Configuration configuration)
+        {
+            var nodes = new Node<Point>[configuration.Width, configuration.Height];
+
+            return nodes;
+        }
+    }
+
     public class PathCreatorService
     {
         private readonly Point _start;
@@ -61,7 +69,13 @@ namespace Liner.Core.Services
                 {
                     for (int y = line.Start.Y - marginBetweenLines; y <= line.Start.Y + marginBetweenLines; y++)
                     {
-                        nodes[x, y].SetUnavailable();
+                        if (x >= 0
+                            && x < _boudaryPoint.X
+                            && y >= 0
+                            && y < _boudaryPoint.Y)
+                        {
+                            nodes[x, y].SetUnavailable();
+                        }
                     }
                 }
 
@@ -69,7 +83,13 @@ namespace Liner.Core.Services
                 {
                     for (int y = line.End.Y - marginBetweenLines; y <= line.End.Y + marginBetweenLines; y++)
                     {
-                        nodes[x, y].SetUnavailable();
+                        if (x >= 0
+                            && x < _boudaryPoint.X
+                            && y >= 0
+                            && y < _boudaryPoint.Y)
+                        {
+                            nodes[x, y].SetUnavailable();
+                        }
                     }
                 }
             }
@@ -77,7 +97,7 @@ namespace Liner.Core.Services
             var startNode = nodes[_start.X, _start.Y];
             var endNode = nodes[_end.X, _end.Y];
 
-            var bfs = new BreadthFirstSearch<Point>();
+            var bfs = new BFS<Point>();
             var bfsResult = bfs.FindPath(startNode, endNode);
 
             var response = new Path();
