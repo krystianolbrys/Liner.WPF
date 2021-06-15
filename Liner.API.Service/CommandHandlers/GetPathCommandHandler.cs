@@ -25,7 +25,7 @@ namespace Liner.API.Service.CommandHandlers
 
             var boudaryPoint = new Domain.BoundaryPoint(request.Boundaries.MaxWidth, request.Boundaries.MaxHeight);
 
-            var pathCreator = new PathCreatorService(start, end, existingLines, boudaryPoint);
+            var pathCreator = new PathCreatorService2(start, end, existingLines, boudaryPoint);
 
             var path = pathCreator.Create();
 

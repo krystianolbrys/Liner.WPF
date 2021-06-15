@@ -73,16 +73,21 @@ namespace Liner.App
                     MaxHeight = (int)mainCanva.Height
                 }
             };
-
+            Stopwatch sw = Stopwatch.StartNew();
             var result = await _linerService.GetPath(request);
 
             var brushColor = GenerateBrushColor();
+
+            
 
             foreach (var line in result.Lines)
             {
                 _linesCollection.Add(line);
                 DrawLineOnCanva(line, mainCanva, brushColor);
             }
+
+            sw.Stop();
+            _logger.Log(sw.ElapsedMilliseconds);
         }
 
         private void DrawLineOnCanva(Contracts.Common.Line line, System.Windows.Controls.Canvas canva, SolidColorBrush color)
