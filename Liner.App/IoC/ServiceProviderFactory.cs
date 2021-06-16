@@ -19,8 +19,8 @@ namespace Liner.App.IoC
         {
             var installers = new List<IServiceInstaller>
             {
-                new ApiServiceInstaller(),
-                new AppInstaller()
+                new ApiServiceInstaller(), // should be installed on API layer if it will be REST endpoint - api layer responsibility - used here only for simplicity
+                new AppInstaller() // here should be installer for Refit Api caller using contract from Liner.API.Contracts and HttpClient provided by IHttpClientFactory for httpClien reusing 
             };
 
             installers.ForEach(
