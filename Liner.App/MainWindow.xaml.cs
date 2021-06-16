@@ -75,7 +75,6 @@ namespace Liner.App
             _pointsSelector.Reset();
             _logger.Log(_pointsSelector);
 
-            // zmienic BOudaries na COnfiguration
             // dorzucić interface do algorytów grafowych
             // ogarnąc zwrotkę z procesu tworzenia ściezki - success/fail
         }
@@ -91,10 +90,11 @@ namespace Liner.App
                     Start = new Contracts.Common.Point { X = line.Start.X, Y = line.Start.Y },
                     End = new Contracts.Common.Point { X = line.End.X, Y = line.End.Y }
                 }).ToList().AsReadOnly(),
-                Boundaries = new Contracts.Requests.Boundaries
+                Configuration = new Contracts.Requests.Configuration
                 {
-                    MaxWidth = (int)canva.Width,
-                    MaxHeight = (int)canva.Height
+                    Width = (int)canva.Width,
+                    Height = (int)canva.Height,
+                    LineMarginInPixels = 3 // should be provided from userInput, appSetting, DB or something else
                 }
             };
         }

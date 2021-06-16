@@ -29,10 +29,11 @@ namespace Liner.API.Service
                     Start = new Point { X = line.Start.X, Y = line.Start.Y },
                     End = new Point { X = line.End.X, Y = line.End.Y }
                 }).ToList().AsReadOnly(),
-                Boundaries = new Commands.Boundaries
+                Configuration = new Commands.Configuration
                 {
-                    MaxWidth = request.Boundaries.MaxWidth,
-                    MaxHeight = request.Boundaries.MaxHeight
+                    Width = request.Configuration.Width,
+                    Height = request.Configuration.Height,
+                    LineMarginInPixels = request.Configuration.LineMarginInPixels
                 }
             };
 

@@ -5,9 +5,9 @@ namespace Liner.Core.Domain
 {
     public class ExistingLines
     {
-        public ICollection<TwoPointLine> TwoPointLines { get; private set; }
+        public IReadOnlyCollection<TwoPointLine> TwoPointLines { get; private set; }
 
-        public ExistingLines(ICollection<TwoPointLine> twoPointLines)
+        public ExistingLines(IReadOnlyCollection<TwoPointLine> twoPointLines)
         {
             TwoPointLines = twoPointLines ?? throw new ArgumentNullException(nameof(twoPointLines));
         }

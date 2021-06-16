@@ -19,22 +19,25 @@ namespace Liner.API.Service.CommandHandlers
                 new Domain.TwoPointLine(
                     new Domain.Point(line.Start.X, line.Start.Y),
                     new Domain.Point(line.End.X, line.End.Y)))
-                .ToList();
+                .ToList().AsReadOnly();
 
             var existingLines = new Domain.ExistingLines(twoPointLines);
-
-            var linesMargin = new Domain.PixelsMargin(5);
-
-            var configuration = new Domain.Configuration(request.Boundaries.MaxWidth, request.Boundaries.MaxHeight, linesMargin);
-
+            var linesMargin = new Domain.PixelsMargin(request.Configuration.LineMarginInPixels);
+            var configuration = new Domain.Configuration(request.Configuration.Width, request.Configuration.Height, linesMargin);
             var pathCreator = new PathCreatorService(start, end, existingLines, configuration);
 
+            // asynchronous non-blocking call to long running process
             Domain.Path path = null;
 
             await Task.Run(() =>
             {
                 path = pathCreator.Create();
             });
+
+            if (path == null)
+            {
+                return Contracts.Responses.PathResponse.EmptyResponse;
+            }
 
             return new Contracts.Responses.PathResponse
             {

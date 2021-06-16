@@ -9,7 +9,7 @@ namespace Liner.API.Service.Commands
         public Point Start { get; set; }
         public Point End { get; set; }
         public ICollection<TwoPointLine> ExistingLines { get; set; }
-        public Boundaries Boundaries { get; set; }
+        public Configuration Configuration { get; set; }
     }
 
     public class Point
@@ -24,9 +24,10 @@ namespace Liner.API.Service.Commands
         public Point End { get; set; }
     }
 
-    public class Boundaries
+    public class Configuration
     {
-        public int MaxWidth { get; set; }
-        public int MaxHeight { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int LineMarginInPixels { get; set; }
     }
 }
