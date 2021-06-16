@@ -14,6 +14,14 @@ using Liner.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Contracts = Liner.API.Contracts;
 
+/// <summary>
+/// For that project some fetures should be implemented but i didn't have so much time:
+/// 0.1 - Liner.API for simplicity are class libraries, in production env should be external API and publicated contracts
+/// 0.2 - Proper UnitTest should be written for whole Lines.Core domain business logic models
+/// 1 - ILogger implementation for storing logs in some persist storage
+/// 2 - Some kind of AoP approach for logging business Exceptions from API
+/// </summary>
+
 namespace Liner.App
 {
     public partial class MainWindow : Window
@@ -75,7 +83,6 @@ namespace Liner.App
             _pointsSelector.Reset();
             _logger.Log(_pointsSelector);
 
-            // dorzucić interface do algorytów grafowych
             // ogarnąc zwrotkę z procesu tworzenia ściezki - success/fail
         }
 

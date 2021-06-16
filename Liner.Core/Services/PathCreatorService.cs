@@ -22,19 +22,24 @@ namespace Liner.Core.Services
 
         public Path Create()
         {
-            var nodes = new PointNodes(_start, _end, _existingLines, _configuration);
+            var nodes = 
+                new PointNodes(_start, _end, _existingLines, _configuration)
+                .Prepare();
 
-            nodes.Prepare();
+            // if there will be more algorithms
+            // they shoud be privded by constructor to this service explicitly
+            // by some kind of provider for strategy selection based on problem to solve
+            IPathFindAlgorithm<Point> searchAlgorithm = 
+                new BFS<Point>();
 
-            IPathFindAlgorithm<Point> searchAlgorithm = new BFS<Point>();
-
-            var bfsResult = searchAlgorithm.FindPath(nodes.GetStartNode, nodes.GetEndNode);
+            var algorithmResult = 
+                searchAlgorithm.FindPath(nodes.GetStartNode, nodes.GetEndNode);
 
             var response = new Path();
 
-            for (int i = 0; i < bfsResult.Values.Length - 1; i++)
+            for (int i = 0; i < algorithmResult.OrderedValuesFromStartToEnd.Length - 1; i++)
             {
-                var line = new TwoPointLine(bfsResult.Values[i], bfsResult.Values[i + 1]);
+                var line = new TwoPointLine(algorithmResult.OrderedValuesFromStartToEnd[i], algorithmResult.OrderedValuesFromStartToEnd[i + 1]);
                 response.AddLine(line);
             }
 

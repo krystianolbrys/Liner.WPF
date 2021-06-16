@@ -19,11 +19,12 @@ namespace Liner.Core.Domain
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public void Prepare()
+        public PointNodes Prepare()
         {
             CreateAndInitializeNodesTable();
             AssignNearesHorizontalAndVerticalNeighoursAsChildrens();
             SetNodesAsUnreachableBasedOnExistingLinesAndMargin();
+            return this;
         }
 
         public Node<Point> GetStartNode => GetNodeBasedOnCordinates(Start);
