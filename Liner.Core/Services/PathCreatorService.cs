@@ -1,6 +1,7 @@
 ﻿using System;
 using Liner.Core.Domain;
-using Liner.Core.Domain.Algorithms.BFS;
+using Liner.Core.Domain.Algorithms.Graphs.Architecture;
+using Liner.Core.Domain.Algorithms.Graphs.BreadthFirstSearch;
 
 namespace Liner.Core.Services
 {
@@ -25,7 +26,7 @@ namespace Liner.Core.Services
 
             nodes.Prepare();
 
-            var searchAlgorithm = new BFS<Point>();
+            IPathFindAlgorithm<Point> searchAlgorithm = new BFS<Point>();
 
             var bfsResult = searchAlgorithm.FindPath(nodes.GetStartNode, nodes.GetEndNode);
 

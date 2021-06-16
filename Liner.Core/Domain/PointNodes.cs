@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Liner.Core.Domain.Algorithms.BFS;
+using Liner.Core.Domain.Algorithms.Graphs.Architecture;
 
 namespace Liner.Core.Domain
 {

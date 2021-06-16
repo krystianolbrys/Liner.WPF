@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Liner.Core.Domain.Algorithms.BFS
+namespace Liner.Core.Domain.Algorithms.Graphs.Architecture
 {
     public class Node<T>
     {
