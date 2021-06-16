@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Liner.Core.Domain
 {
@@ -12,5 +13,7 @@ namespace Liner.Core.Domain
         }
 
         public void AddLine(TwoPointLine line) => Lines.Add(line);
+
+        public bool IsPathFound => Lines.Any();
     }
 }

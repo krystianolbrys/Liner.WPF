@@ -41,6 +41,7 @@ namespace Liner.API.Service.CommandHandlers
 
             return new Contracts.Responses.PathResponse
             {
+                IsPathFound = path.IsPathFound,
                 TwoPointLines = path.Lines.Select(line => new Contracts.Common.TwoPointLine()
                 {
                     Start = new Contracts.Common.Point { X = line.Start.X, Y = line.Start.Y },

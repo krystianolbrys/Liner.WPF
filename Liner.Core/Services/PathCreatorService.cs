@@ -26,7 +26,7 @@ namespace Liner.Core.Services
                 new PointNodes(_start, _end, _existingLines, _configuration)
                 .Prepare();
 
-            // if there will be more algorithms
+            // If there will be more algorithms
             // they shoud be privded by constructor to this service explicitly
             // by some kind of provider for strategy selection based on problem to solve
             IPathFindAlgorithm<Point> searchAlgorithm = 
@@ -39,7 +39,10 @@ namespace Liner.Core.Services
 
             for (int i = 0; i < algorithmResult.OrderedValuesFromStartToEnd.Length - 1; i++)
             {
-                var line = new TwoPointLine(algorithmResult.OrderedValuesFromStartToEnd[i], algorithmResult.OrderedValuesFromStartToEnd[i + 1]);
+                var line = new TwoPointLine(
+                    algorithmResult.OrderedValuesFromStartToEnd[i], 
+                    algorithmResult.OrderedValuesFromStartToEnd[i + 1]);
+
                 response.AddLine(line);
             }
 

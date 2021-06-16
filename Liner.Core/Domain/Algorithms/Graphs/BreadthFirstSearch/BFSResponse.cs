@@ -6,12 +6,15 @@ namespace Liner.Core.Domain.Algorithms.Graphs.BreadthFirstSearch
 {
     public class BFSResponse<TValue> : PathFindAlgorithmResponse<TValue>
     {
-        public BFSResponse(bool success, IReadOnlyCollection<TValue> values)
-            : base(success, values)
+        public BFSResponse(IReadOnlyCollection<TValue> values)
+            : base(values)
         {
         }
 
         public static BFSResponse<TValue> PathNotFound =>
-            new BFSResponse<TValue>(false, new List<TValue>().ToList().AsReadOnly());
+            new BFSResponse<TValue>(EmptyCollection);
+
+        private static IReadOnlyCollection<TValue> EmptyCollection =>
+            new List<TValue>().ToList().AsReadOnly();
     }
 }

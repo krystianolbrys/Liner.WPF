@@ -49,7 +49,7 @@ namespace Liner.Core.Domain.Algorithms.Graphs.BreadthFirstSearch
                 }
             }
 
-            return new BFSResponse<TValue>(true, nodesValues);
+            return new BFSResponse<TValue>(nodesValues);
         }
     }
 }

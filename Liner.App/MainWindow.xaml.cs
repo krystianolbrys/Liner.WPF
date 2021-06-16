@@ -20,6 +20,10 @@ using Contracts = Liner.API.Contracts;
 /// 0.2 - Proper UnitTest should be written for whole Lines.Core domain business logic models
 /// 1 - ILogger implementation for storing logs in some persist storage
 /// 2 - Some kind of AoP approach for logging business Exceptions from API
+/// 3 - Automapper for mapping Contracts <-> CommandRequests <-> BuildCoreDomainModels (I preffer explicit creation of DomainModels)
+/// 4.1 - BFS would be significantly faster with dedicated nodes not Node<TValue>, explicit memory allocations(unsafe)
+/// 4.2 - In this case data volume is very small - only 206k nodes with max 4 childrens
+/// 4.2 - For bigger volume more complex algorithm should be used including paraller execution
 /// </summary>
 
 namespace Liner.App
@@ -68,25 +72,38 @@ namespace Liner.App
                 return;
             }
 
-            var request = BuildRequest(mainCanva, _pointsSelector, _linesCollection);
+            // should be provided from userInput, appSetting, DB or something else
+            var lineMarginInPixels = 3; // 
+
+            var request = BuildRequest(mainCanva, _pointsSelector, _linesCollection, lineMarginInPixels);
 
             var result = await _linerService.GetPath(request);
 
-            var brushColorForPath = GenerateBrushColor();
-
-            foreach (var line in result.TwoPointLines)
+            if (result.IsPathFound)
             {
-                _linesCollection.Add(line);
-                DrawLineOnCanva(line, mainCanva, brushColorForPath);
+                _logger.Log("Path from start to end FOUND");
+                var brushColorForPath = GenerateBrushColor();
+
+                foreach (var line in result.TwoPointLines)
+                {
+                    _linesCollection.Add(line);
+                    DrawLineOnCanva(line, mainCanva, brushColorForPath);
+                }
+            }
+            else
+            {
+                _logger.Log("Path from start to end NOT FOUND - Try other points or shrink line margin");
             }
 
             _pointsSelector.Reset();
             _logger.Log(_pointsSelector);
-
-            // ogarnąc zwrotkę z procesu tworzenia ściezki - success/fail
         }
 
-        private Contracts.Requests.GetPathRequest BuildRequest(Canvas canva, PointsSelector pointsSelector, ICollection<Contracts.Common.TwoPointLine> lines)
+        private Contracts.Requests.GetPathRequest BuildRequest(
+            Canvas canva, 
+            PointsSelector pointsSelector, 
+            ICollection<Contracts.Common.TwoPointLine> lines,
+            int lineMarginInPixels)
         {
             return new Contracts.Requests.GetPathRequest
             {
@@ -101,7 +118,7 @@ namespace Liner.App
                 {
                     Width = (int)canva.Width,
                     Height = (int)canva.Height,
-                    LineMarginInPixels = 3 // should be provided from userInput, appSetting, DB or something else
+                    LineMarginInPixels = lineMarginInPixels
                 }
             };
         }
