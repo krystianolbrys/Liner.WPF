@@ -5,6 +5,9 @@ namespace Liner.Core.Domain
 {
     public class TwoPointLine
     {
+        public Point Start { get; private set; }
+        public Point End { get; private set; }
+
         public TwoPointLine(Point start, Point end)
         {
             Start = start ?? throw new ArgumentNullException(nameof(start));
@@ -12,9 +15,6 @@ namespace Liner.Core.Domain
 
             ValidateIsTwoPointsAreSiblings(Start, End);
         }
-
-        public Point Start { get; set; }
-        public Point End { get; set; }
 
         public void ValidateIsTwoPointsAreSiblings(Point start, Point end)
         {
