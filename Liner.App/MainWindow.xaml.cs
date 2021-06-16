@@ -54,9 +54,10 @@ namespace Liner.App
             _logger = new UILogger(logBox);
 
             _brushCounter = 0;
-
+            
             _logger.Log("Liner.App - Started");
-            _logger.Log(_pointsSelector);
+
+            LogPointsPointsSelectorStatus();
         }
 
         public async void CanvaClickEventHandler(object sender, MouseButtonEventArgs eventArguments)
@@ -66,7 +67,7 @@ namespace Liner.App
 
             _pointsSelector.Add(point);
 
-            _logger.Log(_pointsSelector);
+            LogPointsPointsSelectorStatus();
 
             if (!_pointsSelector.PointSelectionCompleted)
             {
@@ -74,7 +75,7 @@ namespace Liner.App
             }
 
             // should be provided from userInput, appSetting, DB or something else
-            var lineMarginInPixels = 3; // 
+            var lineMarginInPixels = 3;
 
             var request = BuildRequest(mainCanva, _pointsSelector, _linesCollection, lineMarginInPixels);
 
@@ -97,7 +98,7 @@ namespace Liner.App
             }
 
             _pointsSelector.Reset();
-            _logger.Log(_pointsSelector);
+            LogPointsPointsSelectorStatus();
         }
 
         private Contracts.Requests.GetPathRequest BuildRequest(
@@ -163,6 +164,12 @@ namespace Liner.App
             }
 
             return eventArgument.GetPosition(source);
+        }
+
+        private void LogPointsPointsSelectorStatus()
+        {
+            var message = _pointsSelector.ToString();
+            _logger.Log(message);
         }
     }
 }

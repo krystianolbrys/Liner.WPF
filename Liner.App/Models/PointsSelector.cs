@@ -43,19 +43,16 @@ namespace Liner.App.Models
             if (Status == SelectedPointsStatusEnum.NoneSelected)
             {
                 return "Select starting point.";
-                return "None Selected";
             }
 
             if (Status == SelectedPointsStatusEnum.StartSelected)
             {
                 return "Starting point selected, select end point.";
-                return $"Start: {Start} - End: []";
             }
 
             if (Status == SelectedPointsStatusEnum.StartAndEndSelected)
             {
                 return "Points selected - Attempting to draw path.";
-                return $"Start: {Start} - End: {End}";
             }
 
             throw new ArgumentOutOfRangeException();
@@ -76,13 +73,7 @@ namespace Liner.App.Models
                         Status = SelectedPointsStatusEnum.StartAndEndSelected;
                     }
                 },
-                { SelectedPointsStatusEnum.StartAndEndSelected, (point) =>
-                    {
-                        //Start = point;
-                        //End = null;
-                        //Status = SelectedPointsStatusEnum.StartSelected;
-                    }
-                }
+                { SelectedPointsStatusEnum.StartAndEndSelected, (point) => { } }
             };
     }
 }
