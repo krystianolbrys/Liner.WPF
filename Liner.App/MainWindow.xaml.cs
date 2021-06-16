@@ -134,7 +134,7 @@ namespace Liner.App
                 Y1 = line.Start.Y,
                 X2 = line.End.X,
                 Y2 = line.End.Y,
-                StrokeThickness = 1
+                StrokeThickness = 1 // for now - Invariant for simplicity - should be passed to Core.Domain process
             };
 
             canva.Children.Add(lineOnCanva);
