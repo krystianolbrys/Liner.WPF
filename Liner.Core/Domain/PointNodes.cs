@@ -54,6 +54,11 @@ namespace Liner.Core.Domain
                     Nodes[x, y].AddChildren(Nodes[x + 1, y]);
                     Nodes[x, y].AddChildren(Nodes[x, y + 1]);
                     Nodes[x, y].AddChildren(Nodes[x - 1, y]);
+
+                    Nodes[x, y].AddChildren(Nodes[x - 1, y - 1]);
+                    Nodes[x, y].AddChildren(Nodes[x - 1, y + 1]);
+                    Nodes[x, y].AddChildren(Nodes[x + 1, y - 1]);
+                    Nodes[x, y].AddChildren(Nodes[x + 1, y + 1]);
                 }
             }
         }
